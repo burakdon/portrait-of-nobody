@@ -1,4 +1,4 @@
-# Portrait of Nobody
+# Portrait of Somebody, Maybe? Idk
 
 A generative portrait built from sixty simulated sitters that resembles none of them. A creative reflection on *Moral AI: And How We Get There* (Borg, Sinnott-Armstrong, Conitzer).
 
