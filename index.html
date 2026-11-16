@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="A generative portrait built from sixty simulated sitters that resembles none of them. A creative reflection on Moral AI.">
-<title>Portrait of Somebody, Maybe?</title>
+<title>Somebody Somewhere Sometime</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;500&display=swap">
 <style>
 body { margin: 0; }
@@ -55,7 +55,7 @@ a:focus-visible { outline: 2px solid var(--nobody); outline-offset: 2px; }
 
   <div class="text">
     <div class="eyebrow">Book club reflection · Moral AI</div>
-    <h1>Portrait of Somebody, Maybe? Idk</h1>
+    <h1>Portrait of Nobody? Somebody, Maybe? Idk</h1>
 
     <div class="label">
       <span><b>Burak Donbekci</b>, 2026</span>
@@ -64,15 +64,14 @@ a:focus-visible { outline: 2px solid var(--nobody); outline-offset: 2px; }
 
     <div class="note">
       <p class="lead">Sixty people sat for this portrait, but we can appreciate none of them. Or maybe we can appreciate all of them.</p>
-      <p>Reading the privacy and fairness chapters of <em>Moral AI</em>, I kept thinking that AI safeguards and protections either lose or are destined to lose whenever they stand in the way of technical and commercial progress. The monetary and even personal rewards are too motivating for industry and research to not move forward. So the idea that interests me most is the one where the two stop competing: synthetic data.</p>
+      <p>Reading the privacy and fairness chapters of <em>Moral AI</em>, I kept thinking that AI safeguards and protections either lose or are destined to lose whenever they stand in the way of technical and commercial progress. The monetary, intellectual and even personal rewards are too motivating for industry and research to not move forward. So the idea that interests me most is the one where the two stop competing and can go hand in hand: synthetic data.</p>
       <p>Each sitter here is drawn faintly and laid over all the others, until only what they share is left. The bright face on top is drawn from that shared shape. It looks like a person and it belongs to no one really. You can study it, copy it and pass it around, and nobody has been exposed.</p>
-      <p>That is what I hope truly representative synthetic data can be: all of the patterns, and none of the people.</p>
-      <p>I met the same idea from the other side while building <a href="https://github.com/burakdon/neurocue">NeuroCue</a> with my team. We wanted to train an AI speech therapist for people with aphasia, and it needed thousands of practice sessions that no real patient should have to sit through. So we built synthetic patients, fitted to how real patients speak, and let it practise on people who do not exist.</p>
-      <p>One sitter does not blend in. Look for the face that leans away from the rest and stays visible after the others have dissolved. Outliers will be outliers, and their place in society can’t be neglected. A portrait made from everyone still has to decide what to do with the person who is unlike everyone else.</p>
+      <p>I met the same idea from the other side while building <a href="https://github.com/burakdon/neurocue">NeuroCue</a> with my team. We wanted to train an AI speech therapist for people with aphasia, and it needed thousands of practice sessions that no real patient should have to sit through, and none ever has. So we built synthetic patients, fitted to how real patients speak, and let it practise on people who do not exist.</p>
+      <p>One sitter does not blend in. Look for the face that leans away from the rest and stays visible after the others have dissolved. Outliers will be outliers, and their place in society can’t be neglected. A portrait made from everyone still has to decide what to do with the person who is unlike everyone else. This is what makes overgeneralization and overfitting scary when it comes to representing a population as a distribution.</p>
       <p>That sitter is only the weakness you can see. A model that generates people has learned from real ones, and what it learned can sometimes be worked backwards. With enough samples, an attacker can tell whether a particular person was in the training data, and image generators have reproduced near-copies of pictures they were trained on. The closer the synthetic data follows the real people, the more of them can be recovered from it.</p>
-      <p>There are defences, such as adding noise while the model learns, but each one costs some accuracy. So synthetic data shrinks the trade-off between privacy and progress without ending it. I still find it the most promising idea in this area, because it is a safeguard that industry has a reason to want. The question mark in the title is for what remains: the face might be nobody, or it might still lead back to somebody.</p>
+      <p>There are defences, such as adding noise while the model learns, but each one costs some accuracy. So synthetic data shrinks the trade-off between privacy and progress without ending it. I still find it the most promising idea in this area, because it is a safeguard that industry has a reason to want. The question marks in the title are for what remains: the face might be nobody, or it might still lead back to somebody.</p>
       <p>There is also a brighter version of this future, and parts of it are already here. Synthetic data does not have to stay a safer copy of real data. In some fields it has already become better than the real thing. AlphaGo Zero never studied a single human game. It learned Go only from games it played against itself, and it beat the version that had learned from human experts 100 to 0. AlphaFold learned from roughly two hundred thousand protein structures that scientists had spent decades working out by experiment, improved partly by training on its own predictions, and then predicted the shapes of more than two hundred million proteins. Self-driving cars now practise their rarest and most dangerous moments over billions of simulated miles, where no one can be hurt.</p>
-      <p>Medicine is where I most want to see this happen. Researchers are already designing proteins that have never existed in nature, and testing trials where modelled patients stand in for some of the people who would otherwise be given a placebo. A rare disease could be studied through a million synthetic patients instead of the few hundred who exist. A treatment could be tried across every age and background before it reaches a single person. If we get there, nobody will have to sit for the portrait, and everyone will still be able to learn from it.</p>
+      <p>Medicine is where this could be most exciting. Researchers are already designing proteins that have never existed in nature, and testing trials where modelled patients stand in for some of the people who would otherwise be given a placebo. A rare disease could be studied through a million synthetic patients instead of the few hundred who exist. A treatment could be tried across every age and background before it reaches a single person. If we get there, nobody will have to sit for the portrait, and everyone will still be able to learn from it.</p>
     </div>
 
     <p class="source">A creative reflection on <em>Moral AI: And How We Get There</em> by Jana Schaich Borg, Walter Sinnott-Armstrong and Vincent Conitzer. The sitters are generated by code. No real faces or personal data were used.</p>
