@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A generative portrait built from sixty simulated sitters that resembles none of them. A creative reflection on Moral AI.">
+<title>Portrait of Nobody</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<style>
+body { margin: 0; }
+/* Layout: a matted cyanotype print on a dark wall, with a museum wall label and artist's note beside it. Single look by choice. */
+:root {
+  --wall: #0b1727; --mat: #e6ecf3; --print: #173d73; --line: #e8f0fb; --dim: #9fb4d0; --rule: #24384f; --nobody: #ffdca0;
+  --display: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+body { background: var(--wall); color: var(--line); font-family: var(--sans); font-size: 16px; line-height: 1.65;
+  padding-block: 44px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+main { max-width: 1040px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 36px 56px; align-items: start; }
+@media (min-width: 880px) { main { grid-template-columns: minmax(0, 500px) minmax(0, 1fr); } .hang { position: sticky; top: calc(24px + env(safe-area-inset-top, 0px)); } }
+.hang { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.mat { background: var(--mat); padding: clamp(10px, 3vw, 18px); box-shadow: 0 18px 50px rgba(0, 0, 0, .45); }
+canvas { display: block; width: 100%; height: auto; aspect-ratio: 5 / 6; background: var(--print); }
+.caption { font-family: var(--mono); font-size: 12px; letter-spacing: .04em; color: var(--dim); min-height: 1.65em; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+button { font: inherit; font-size: 14px; color: var(--line); background: transparent; border: 1px solid var(--rule); border-radius: 2px; padding: 8px 14px; cursor: pointer; }
+button:hover { border-color: var(--nobody); color: var(--nobody); }
+button:focus-visible { outline: 2px solid var(--nobody); outline-offset: 2px; }
+.text { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); }
+h1 { font-family: var(--display); font-style: italic; font-weight: 500; font-size: clamp(44px, 9vw, 68px); line-height: 1; margin: 0; text-wrap: balance; color: var(--nobody); }
+.label { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding-block: 14px; font-size: 14px; color: var(--dim); display: flex; flex-direction: column; gap: 2px; }
+.label b { color: var(--line); font-weight: 500; }
+.note { display: flex; flex-direction: column; gap: 16px; }
+.note p { margin: 0; max-width: 58ch; }
+.note .lead { font-family: var(--display); font-size: 24px; line-height: 1.35; }
+.source { font-size: 13px; color: var(--dim); max-width: 58ch; }
+</style>
+</head>
+<body>
+<main>
+  <div class="hang">
+    <div class="mat"><canvas id="print" width="600" height="720" role="img" aria-label="A ghostly blue composite of sixty overlapping line-drawn faces, with one bright new face drawn over it"></canvas></div>
+    <div class="caption" id="caption" aria-live="polite"></div>
+    <div class="actions">
+      <button type="button" id="again">Draw another nobody</button>
+      <button type="button" id="seat">Seat sixty new sitters</button>
+    </div>
+  </div>
+
+  <div class="text">
+    <div class="eyebrow">Book club reflection · Moral AI</div>
+    <h1>Portrait of Nobody</h1>
+
+    <div class="label">
+      <span><b>Burak</b>, 2026</span>
+      <span>Sixty simulated sitters and one invented face, line on blue</span>
+      <span>Drawn fresh in your browser. No two viewings are alike.</span>
+    </div>
+
+    <div class="note">
+      <p class="lead">Sixty people sat for this portrait. None of them is in it.</p>
+      <p>Reading the privacy chapter of <em>Moral AI</em>, I kept thinking that privacy protections lose whenever they stand in the way of technical and commercial progress. So the idea that interests me most is the one where the two stop competing: synthetic data.</p>
+      <p>Each sitter here is drawn faintly and laid over all the others, until only what they share is left. The bright face on top is drawn from that shared shape. It looks like a person and it belongs to no one. You can study it, copy it and pass it around, and nobody has been exposed. Press the button and another nobody takes its place.</p>
+      <p>That is what I hope truly representative synthetic data can be: all of the pattern, and none of the people.</p>
+      <p>One sitter does not blend in. Look for the face that leans away from the rest and stays visible after the others have dissolved. A portrait made from everyone still has to decide what to do with the person who is unlike everyone else.</p>
+    </div>
+
+    <p class="source">A creative reflection on <em>Moral AI: And How We Get There</em> by Jana Schaich Borg, Walter Sinnott-Armstrong and Vincent Conitzer. The sitters are generated by code. No real faces or personal data were used.</p>
+  </div>
+</main>
+
+<script>
+(function(){
+  const W=600,H=720,N=60,cv=document.getElementById('print'),cap=document.getElementById('caption');
+  const dpr=Math.min(2,window.devicePixelRatio||1);
+  const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const css=getComputedStyle(document.documentElement), C=k=>css.getPropertyValue(k).trim();
+  const INK=C('--line'), GOLD=C('--nobody'), BLUE=C('--print');
+  function layer(){const c=document.createElement('canvas');c.width=W*dpr;c.height=H*dpr;const x=c.getContext('2d');x.scale(dpr,dpr);x.lineCap=x.lineJoin='round';return [c,x]}
+  cv.width=W*dpr;cv.height=H*dpr;const ctx=cv.getContext('2d');ctx.scale(dpr,dpr);ctx.lineCap=ctx.lineJoin='round';
+  const [paper,pctx]=layer(), [comp,cctx]=layer();
+
+  const rnd=Math.random;
+  const g=()=>{let u=0;while(!u)u=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*rnd())};
+  const nrm=(m,s)=>m+s*g();
+
+  // paper: blue ground, soft vignette, grain
+  (function(){
+    pctx.fillStyle=BLUE;pctx.fillRect(0,0,W,H);
+    const v=pctx.createRadialGradient(W/2,H*.45,80,W/2,H/2,H*.75);v.addColorStop(0,'rgba(255,255,255,.07)');v.addColorStop(1,'rgba(0,0,20,.38)');
+    pctx.fillStyle=v;pctx.fillRect(0,0,W,H);
+    for(let i=0;i<5200;i++){pctx.fillStyle=rnd()<.5?'rgba(255,255,255,.045)':'rgba(0,0,30,.07)';pctx.fillRect(rnd()*W,rnd()*H,1+rnd()*1.4,1+rnd()*1.4)}
+  })();
+
+  function sitter(odd){
+    const p={a:nrm(150,13),ht:nrm(190,13),hb:nrm(215,17),j:nrm(.74,.07),ey:nrm(10,8),ex:nrm(64,6),ew:nrm(27,3.5),eo:Math.max(4,nrm(8,2)),
+      bo:nrm(26,5),bt:nrm(0,4),nl:nrm(78,9),nw:nrm(17,3),ml:nrm(40,7),mw:nrm(42,7),mc:nrm(0,5),lip:Math.max(3,nrm(9,3)),
+      hh:nrm(.58,.08),hair:[0,0,0,0,0].map(()=>nrm(0,14)),dx:nrm(0,5),dy:nrm(0,5),rot:nrm(0,.035),s:nrm(1,.04),wob:[]};
+    if(odd)Object.assign(p,{a:116,ht:214,hb:268,j:.6,rot:.21,dx:46,dy:-10,s:1.08,ex:50,nl:98,ml:50,hh:.8});
+    return p;
+  }
+  const quad=(a,b,c,n=14)=>{const o=[];for(let i=0;i<=n;i++){const t=i/n,u=1-t;o.push([u*u*a[0]+2*u*t*b[0]+t*t*c[0],u*u*a[1]+2*u*t*b[1]+t*t*c[1]])}return o};
+  function spline(P,closed,seg=10){const o=[],n=P.length,at=i=>closed?P[(i+n)%n]:P[Math.max(0,Math.min(n-1,i))];
+    for(let i=0;i<(closed?n:n-1);i++){const p0=at(i-1),p1=at(i),p2=at(i+1),p3=at(i+2);
+      for(let k=0;k<seg;k++){const t=k/seg,t2=t*t,t3=t2*t;
+        o.push([.5*(2*p1[0]+(p2[0]-p0[0])*t+(2*p0[0]-5*p1[0]+4*p2[0]-p3[0])*t2+(3*p1[0]-p0[0]-3*p2[0]+p3[0])*t3),
+                .5*(2*p1[1]+(p2[1]-p0[1])*t+(2*p0[1]-5*p1[1]+4*p2[1]-p3[1])*t2+(3*p1[1]-p0[1]-3*p2[1]+p3[1])*t3)])}}
+    o.push(closed?o[0]:P[n-1]);return o}
+  function geometry(p){
+    const {a,ht,hb,j,ey}=p, by=ey-p.bo, ny=ey+p.nl, my=ny+p.ml, L=[];
+    const right=[[a*.6,-ht*.88],[a*.95,-ht*.5],[a,-ht*.05],[a*.96,hb*.3],[a*j,hb*.62],[a*.5,hb*.9]];
+    L.push(spline([[0,-ht],...right,[0,hb],...right.slice().reverse().map(q=>[-q[0],q[1]])],true));
+    const hy=-ht*p.hh;
+    L.push(spline([[-a*.97,-ht*.3+p.hair[0]],[-a*.55,hy+p.hair[1]],[0,hy+p.hair[2]],[a*.55,hy+p.hair[3]],[a*.97,-ht*.3+p.hair[4]]],false));
+    for(const s of [-1,1]){
+      const X=x=>s*(p.ex+x);
+      L.push(quad([X(-p.ew-4),by+p.bt],[X(0),by-9],[X(p.ew+6),by-p.bt]));
+      L.push(quad([X(-p.ew),ey],[X(0),ey-p.eo*2],[X(p.ew),ey]));
+      L.push(quad([X(-p.ew),ey],[X(0),ey+p.eo*1.2],[X(p.ew),ey]));
+      const iris=[];for(let i=0;i<=16;i++){const t=i/16*Math.PI*2;iris.push([X(Math.cos(t)*6.5),ey-1+Math.sin(t)*6.5])}L.push(iris);
+    }
+    L.push(quad([-5,ey+16],[-12,ny-18],[-p.nw,ny]).concat(quad([-p.nw,ny],[0,ny+13],[p.nw,ny])));
+    L.push(quad([-p.mw,my],[0,my+p.mc*2],[p.mw,my]));
+    L.push(quad([-p.mw*.6,my+6],[0,my+p.lip*2],[p.mw*.6,my+6]));
+    for(const s of [-1,1]){
+      L.push(quad([s*a*.99,ey-18],[s*(a+22),ey+8],[s*a*.95,ey+50]));
+      L.push(quad([s*a*j*.72,hb*.8],[s*a*j*.7,hb+60],[s*a*j*1.3,hb+112]));
+    }
+    const cs=Math.cos(p.rot)*p.s, sn=Math.sin(p.rot)*p.s, cx=300+p.dx, cy=318+p.dy;
+    return L.map(l=>l.map(([x,y])=>[cx+x*cs-y*sn, cy+x*sn+y*cs]));
+  }
+  function stroke(x,polys,color,alpha,width,limit){
+    x.strokeStyle=color;x.globalAlpha=alpha;x.lineWidth=width;let left=limit==null?Infinity:limit;
+    for(const l of polys){if(left<2)break;x.beginPath();x.moveTo(l[0][0],l[0][1]);const n=Math.min(l.length,left);for(let i=1;i<n;i++)x.lineTo(l[i][0],l[i][1]);x.stroke();left-=n}
+    x.globalAlpha=1;
+  }
+  const count=polys=>polys.reduce((s,l)=>s+l.length,0);
+
+  let faces=[], flash=null, nobody=null, shown=0, serial=0, raf=0;
+  function paint(){
+    ctx.drawImage(paper,0,0,W,H);ctx.drawImage(comp,0,0,W,H);
+    if(flash)stroke(ctx,flash,INK,.55,1.2);
+    if(nobody){ctx.shadowColor=GOLD;ctx.shadowBlur=6;stroke(ctx,nobody,GOLD,.95,2,shown);ctx.shadowBlur=0}
+  }
+  let oddAt=0;
+  const addToComp=(f,i)=>stroke(cctx,f,INK,i===oddAt?.36:.11,1.3);
+  function drawNobody(animate){
+    cancelAnimationFrame(raf);nobody=geometry(sitter(false));serial++;flash=null;
+    const total=count(nobody), t0=performance.now();
+    cap.textContent=`Nobody no. ${serial} · drawn from sixty sitters, resembling none`;
+    if(!animate||still){shown=total;paint();return}
+    const step=now=>{const k=Math.min(1,(now-t0)/2600);shown=Math.floor(total*(1-Math.pow(1-k,2)));paint();if(k<1)raf=requestAnimationFrame(step)};
+    raf=requestAnimationFrame(step);
+  }
+  function seat(animate){
+    cancelAnimationFrame(raf);cctx.clearRect(0,0,W,H);nobody=null;
+    oddAt=8+Math.floor(rnd()*44);
+    faces=Array.from({length:N},(_,i)=>geometry(sitter(i===oddAt)));
+    if(!animate||still){faces.forEach(addToComp);drawNobody(animate);return}
+    let i=0,frame=0;
+    const step=()=>{
+      if(frame++%3===0){if(i<N){addToComp(faces[i],i);flash=faces[i];i++;cap.textContent=`Sitter ${i} of ${N}`}else{drawNobody(true);return}}
+      paint();raf=requestAnimationFrame(step)};
+    raf=requestAnimationFrame(step);
+  }
+  document.getElementById('again').addEventListener('click',()=>drawNobody(true));
+  document.getElementById('seat').addEventListener('click',()=>{serial=0;seat(true)});
+  seat(false);serial=0;drawNobody(true);
+})();
+</script>
+</body>
+</html>
